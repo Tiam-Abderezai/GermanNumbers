@@ -9,37 +9,41 @@ import java.util.*
 
 class InputNumberViewModel : ViewModel() {
 
-    private val _state = mutableStateOf(InputNumberScreenState())
-    val state: State<InputNumberScreenState> = _state
+    private val _stateTextOutput = mutableStateOf(InputNumberScreenState())
+    val stateTextOutput: State<InputNumberScreenState> = _stateTextOutput
+
+    private val _stateTextInput = mutableStateOf(InputNumberScreenState())
+    val stateTextInput: State<InputNumberScreenState> = _stateTextInput
+
     private var textToSpeech: TextToSpeech? = null
 
     fun onTextFieldValueChange(text: String) {
-        _state.value = state.value.copy(
+        _stateTextInput.value = stateTextInput.value.copy(
             text = text
         )
     }
 
-    fun textToSpeech(context: Context) {
-        _state.value = state.value.copy(
-            isButtonEnabled = false
+    fun textToSpeech(context: Context, number: String) {
+        _stateTextOutput.value = stateTextOutput.value.copy(
+            isButtonEnabled = false,
+            text = number
         )
         textToSpeech = TextToSpeech(
             context
         ) {
-            println("bullshit $it")
             if (it == TextToSpeech.SUCCESS) {
                 textToSpeech?.let { txtToSpeech ->
                     txtToSpeech.language = Locale.GERMANY
                     txtToSpeech.setSpeechRate(1.0f)
                     txtToSpeech.speak(
-                        _state.value.text,
+                        _stateTextOutput.value.text,
                         TextToSpeech.QUEUE_ADD,
                         null,
                         null
                     )
                 }
             }
-            _state.value = state.value.copy(
+            _stateTextInput.value = stateTextInput.value.copy(
                 isButtonEnabled = true
             )
         }

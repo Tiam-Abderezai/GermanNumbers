@@ -25,15 +25,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.germannumbers.R
+import kotlin.random.Random
 
 @Preview(showBackground = true)
 @Composable
 fun InputNumberScreen(
     viewModel: InputNumberViewModel = viewModel()
 ) {
-    val state = viewModel.state.value
+    val stateTextSpeak = viewModel.stateTextOutput.value
+    val stateTextInput = viewModel.stateTextInput.value
     val context = LocalContext.current
     val focusRequester = remember { FocusRequester() }
+    val randomNumber = Random.nextInt(0, 1000).toString()
 
     Column(
         modifier = Modifier
@@ -45,20 +48,23 @@ fun InputNumberScreen(
         TextField(
             modifier = Modifier.focusRequester(focusRequester),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            value = state.text,
+            value = stateTextInput.text,
             onValueChange = {
                 viewModel.onTextFieldValueChange(it)
             }
         )
         LaunchedEffect(Unit) {
+            println("rando numb $randomNumber")
+//            viewModel.onTextFieldValueChange(randomNumber)
+            viewModel.textToSpeech(context, randomNumber)
             focusRequester.requestFocus()
         }
         Row {
             Button(
                 onClick = {
-                    viewModel.textToSpeech(context)
+                    viewModel.textToSpeech(context, randomNumber)
                 },
-                enabled = state.isButtonEnabled
+                enabled = stateTextInput.isButtonEnabled
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_speak),
@@ -71,7 +77,7 @@ fun InputNumberScreen(
 //            viewModel.textToSpeech(context)
                     // verify button
                 },
-                enabled = state.isButtonEnabled
+                enabled = stateTextInput.isButtonEnabled
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_check),
