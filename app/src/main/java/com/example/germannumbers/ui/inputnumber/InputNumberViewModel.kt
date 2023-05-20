@@ -59,6 +59,7 @@ class InputNumberViewModel : ViewModel() {
     fun validateInputMatchesSpeech(number: String) {
         println("stateTextInput: ${stateTextSpeech.value.text} vs $number")
         val isAnswerCorrect = stateTextSpeech.value.text == number
+        _stateInputMatchesSpeech.value = stateInputMatchesSpeech.value.copy(inputMatchesSpeech = isAnswerCorrect)
         if (isAnswerCorrect) {
 //            _stateTextSpeech.value = stateTextSpeech.value.copy(
             _stateButtonColor.value = stateButtonColor.value.copy(buttonColor = ButtonColor.SUCCESS)

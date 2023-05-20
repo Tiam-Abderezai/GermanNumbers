@@ -2,7 +2,7 @@ package com.example.germannumbers.ui.inputnumber
 
 data class InputNumberScreenState(
     val inputMatchesSpeech: Boolean = false,
-    val text: String = "",
+    var text: String = "",
     var buttonColor: ButtonColor = ButtonColor.IDLE
 )
 

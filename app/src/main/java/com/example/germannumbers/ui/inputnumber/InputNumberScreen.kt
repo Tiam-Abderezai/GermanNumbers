@@ -14,7 +14,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.withRunningRecomposer
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -60,7 +62,6 @@ fun InputNumberScreen(
         )
         LaunchedEffect(Unit) {
             println("rando numb $randomNumber")
-//            viewModel.onTextFieldValueChange(randomNumber)
             viewModel.textToSpeech(context, randomNumber)
             focusRequester.requestFocus()
         }
@@ -99,6 +100,28 @@ fun InputNumberScreen(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_check),
+                    contentDescription = "",
+                    Modifier.size(32.dp)
+                )
+            }
+            Button(
+                onClick = {
+                    viewModel.textToSpeech(context, randomNumber)
+                    stateTextInput.text = ""
+                },
+                enabled = isAnswerCorrect,
+                colors = ButtonDefaults.buttonColors(
+//                    when (stateButtonColor.buttonColor.ordinal) {
+//                        1 -> Color.Red
+//                        2 -> Color.Green
+//                        else -> {
+//                            Color.Gray
+//                        }
+//                    }
+                )
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_next),
                     contentDescription = "",
                     Modifier.size(32.dp)
                 )
