@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,8 +34,11 @@ import kotlin.random.Random
 fun InputNumberScreen(
     viewModel: InputNumberViewModel = viewModel()
 ) {
-    val stateTextSpeak = viewModel.stateTextOutput.value
+    val stateTextSpeak = viewModel.stateTextSpeech.value
     val stateTextInput = viewModel.stateTextInput.value
+    val stateInputMatchesSpeech = viewModel.stateInputMatchesSpeech.value
+    val stateButtonColor = viewModel.stateButtonColor.value
+
     val context = LocalContext.current
     val focusRequester = remember { FocusRequester() }
     val randomNumber = Random.nextInt(0, 1000).toString()
@@ -60,11 +65,11 @@ fun InputNumberScreen(
             focusRequester.requestFocus()
         }
         Row {
+            // Repeat the number to user
             Button(
                 onClick = {
-                    viewModel.textToSpeech(context, randomNumber)
-                },
-                enabled = stateTextInput.isButtonEnabled
+                    viewModel.textToSpeech(context, stateTextSpeak.text)
+                }
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_speak),
@@ -72,12 +77,25 @@ fun InputNumberScreen(
                     Modifier.size(32.dp)
                 )
             }
+            // Verify if 'stateTextInput' matches number 'stateTextSpeech'
+            val isAnswerCorrect = stateInputMatchesSpeech.inputMatchesSpeech
+            val isTextFieldEmpty = stateTextInput.text.isNotEmpty()
+            println("isAnswerCorrect $isAnswerCorrect")
+            println("stateButtonColor ${stateButtonColor.buttonColor.ordinal}")
             Button(
                 onClick = {
-//            viewModel.textToSpeech(context)
-                    // verify button
+                    viewModel.validateInputMatchesSpeech(stateTextInput.text)
                 },
-                enabled = stateTextInput.isButtonEnabled
+                enabled = isTextFieldEmpty,
+                colors = ButtonDefaults.buttonColors(
+                    when (stateButtonColor.buttonColor.ordinal) {
+                        1 -> Color.Red
+                        2 -> Color.Green
+                        else -> {
+                            Color.Gray
+                        }
+                    }
+                )
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_check),
