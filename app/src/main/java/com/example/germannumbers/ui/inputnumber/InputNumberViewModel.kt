@@ -21,6 +21,9 @@ class InputNumberViewModel : ViewModel() {
     private var _stateButtonColor = mutableStateOf(InputNumberScreenState())
     val stateButtonColor: State<InputNumberScreenState> = _stateButtonColor
 
+    private var _stateScoreCount = mutableStateOf(InputNumberScreenState())
+    val stateScoreCount: State<InputNumberScreenState> = _stateScoreCount
+
     private var textToSpeech: TextToSpeech? = null
 
     fun onTextFieldValueChange(text: String) {
@@ -58,11 +61,13 @@ class InputNumberViewModel : ViewModel() {
 
     fun validateInputMatchesSpeech(number: String) {
         println("stateTextInput: ${stateTextSpeech.value.text} vs $number")
+        println("scoreCount: ${stateScoreCount.value.scoreCount}")
         val isAnswerCorrect = stateTextSpeech.value.text == number
         _stateInputMatchesSpeech.value = stateInputMatchesSpeech.value.copy(inputMatchesSpeech = isAnswerCorrect)
         if (isAnswerCorrect) {
-//            _stateTextSpeech.value = stateTextSpeech.value.copy(
             _stateButtonColor.value = stateButtonColor.value.copy(buttonColor = ButtonColor.SUCCESS)
+//            _stateScoreCount.value = stateScoreCount.value.copy(scoreCount = stateScoreCount.value.scoreCount++)
+            _stateScoreCount.value.scoreCount++
         } else {
             _stateButtonColor.value = stateButtonColor.value.copy(buttonColor = ButtonColor.ERROR)
         }
