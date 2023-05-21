@@ -117,6 +117,8 @@ fun InputNumberScreen(
                 onClick = {
                     viewModel.textToSpeech(context, randomNumber)
                     stateTextInput.text = ""
+                    // Resets the button color to disabled after going to next question
+                    stateInputMatchesSpeech.inputMatchesSpeech = false
                 },
                 enabled = isAnswerCorrect,
                 colors = ButtonDefaults.buttonColors(
