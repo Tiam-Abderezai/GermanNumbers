@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import java.util.*
 
-class InputNumberViewModel : ViewModel() {
+class NumberViewModel : ViewModel() {
 
     private var _stateTextSpeech = mutableStateOf(InputNumberScreenState())
     val stateTextSpeech: State<InputNumberScreenState> = _stateTextSpeech
